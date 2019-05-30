@@ -12,7 +12,8 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 
 import os
 from dotenv import load_dotenv
-import datetime
+
+# import datetime
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 # BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
@@ -37,9 +38,9 @@ AUTH_USER_MODEL = 'users.User'
 # }
 
 
-# SIMPLE_JWT = {
-#   'AUTH_HEADER_TYPES': ('JWT',),
-# }
+SIMPLE_JWT = {
+    'AUTH_HEADER_TYPES': ('JWT',),
+}
 
 
 # Application definition
@@ -61,12 +62,13 @@ INSTALLED_APPS = [
     'django_filters',
     'service_objects',
     'django_extensions',
-    # 'corsheaders',
-    # 'djoser'
+    'corsheaders',
+    #'djoser'
     #'debug_toolbar',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -74,19 +76,22 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # 'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.BrokenLinkEmailsMiddleware',
     #'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 CORS_ORIGIN_ALLOW_ALL = True
-CORS_ALLOW_CREDENTIALS = True
-CORS_ORIGIN_WHITELIST = (
-    'localhost:8000',
-)
+CORS_ALLOW_CREDENTIALS = False
+# CORS_ORIGIN_WHITELIST = (
+#     'localhost:4200',
+# )
+#
+# CORS_ORIGIN_REGEX_WHITELIST = (
+#     'localhost:4200',
+# )
 
-CORS_ORIGIN_REGEX_WHITELIST = (
-    'localhost:8000',
-)
+MIDDLEWARE.insert(2, 'corsheaders.middleware.CorsMiddleware')
+
 
 ROOT_URLCONF = 'didi_digest.urls'
 
@@ -174,31 +179,52 @@ USE_TZ = True
 
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+#STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 # STATICFILES_DIRS = (
 #    os.path.join(BASE_DIR, '/static/'),
 # )
 # TEMPLATE_DIRS = (
 #    os.path.join(BASE_DIR, 'templates'),
-#)
+# )
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+
     'PAGE_SIZE': 5,
 
-    #    'DEFAULT_PERMISSION_CLASSES': (
-    #        'rest_framework.permissions.IsAuthenticated',
-    #    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.IsAdminUser',
+        'rest_framework.permissions.AllowAny',
+    ),
 
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-        #        'web_tokens.authentication.JWTAuthentication',
-        #        'rest_framework.authentication.SessionAuthentication',
-        #        'rest_framework.authentication.BasicAuthentication',
-        #        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        # 'rest_framework_simplejwt.authentication.JWTAuthentication',
+        # 'web_tokens.authentication.JWTAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+        # 'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
     ),
+
+    # 'EXCEPTION_HANDLER': 'rest_framework_json_api.exceptions.exception_handler',
+
+    # 'DEFAULT_PAGINATION_CLASS':
+    #     'rest_framework_json_api.pagination.PageNumberPagination',
+
+    # 'DEFAULT_PARSER_CLASSES': (
+    #     'rest_framework_json_api.parsers.JSONParser',
+    #     'rest_framework.parsers.FormParser',
+    #     'rest_framework.parsers.MultiPartParser',
+    # ),
+
+    # 'DEFAULT_RENDERER_CLASSES': (
+    #     'rest_framework_json_api.renderers.JSONRenderer',
+    #     'rest_framework.renderers.BrowsableAPIRenderer',
+    # ),
+
+    # 'DEFAULT_METADATA_CLASS': 'rest_framework_json_api.metadata.JSONAPIMetadata',
 
     'DEFAULT_FILTER_BACKENDS': (
         'django_filters.rest_framework.DjangoFilterBackend',

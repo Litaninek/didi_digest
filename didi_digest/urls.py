@@ -29,11 +29,10 @@ api_urls = [
 ]
 
 urlpatterns = [
-                  path('admin/', admin.site.urls),
+    path('admin/', admin.site.urls),
     path('api/', include(api_urls)),
     # path(r'^auth/', include('djoser.urls')),
     # path(r'^auth/', include('djoser.urls.authtoken')),
-    # path(r'^auth/', include('djoser.urls')),
     # path(r'^auth/', include('djoser.urls.jwt')),
 ]  #+ static(base.STATIC_URL, document_root=base.STATIC_ROOT)
 
