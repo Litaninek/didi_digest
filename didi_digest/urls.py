@@ -25,12 +25,17 @@ from django.urls import (
 api_urls = [
     path('', include(('digests.urls', 'digests'), namespace='digests', )),
     path('users/', include(('users.urls', 'users'), namespace='users', )),
+    # path('tokens/', include(('web_tokens.urls', 'web_tokens'), namespace='web_tokens')),
 ]
 
 urlpatterns = [
                   path('admin/', admin.site.urls),
-                  path('api/', include(api_urls))
-              ] + static(base.STATIC_URL, document_root=base.STATIC_ROOT)
+    path('api/', include(api_urls)),
+    # path(r'^auth/', include('djoser.urls')),
+    # path(r'^auth/', include('djoser.urls.authtoken')),
+    # path(r'^auth/', include('djoser.urls')),
+    # path(r'^auth/', include('djoser.urls.jwt')),
+]  #+ static(base.STATIC_URL, document_root=base.STATIC_ROOT)
 
 if settings.DEBUG:
     import debug_toolbar

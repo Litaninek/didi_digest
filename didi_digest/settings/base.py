@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 
 import os
 from dotenv import load_dotenv
+import datetime
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 # BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
@@ -31,6 +32,16 @@ ALLOWED_HOSTS = ['*']
 
 AUTH_USER_MODEL = 'users.User'
 
+# JWT_AUTH = {
+#    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=14)
+# }
+
+
+# SIMPLE_JWT = {
+#   'AUTH_HEADER_TYPES': ('JWT',),
+# }
+
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -43,13 +54,16 @@ INSTALLED_APPS = [
     # project apps
     'digests',
     'users',
+    #'web_tokens',
     # third-party apps
     'rest_framework',
+    #'rest_framework.authtoken'
     'django_filters',
     'service_objects',
     'django_extensions',
-    'corsheaders',
-    'debug_toolbar',
+    # 'corsheaders',
+    # 'djoser'
+    #'debug_toolbar',
 ]
 
 MIDDLEWARE = [
@@ -60,8 +74,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    # 'corsheaders.middleware.CorsMiddleware',
+    #'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 CORS_ORIGIN_ALLOW_ALL = True
@@ -162,9 +176,29 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
+# STATICFILES_DIRS = (
+#    os.path.join(BASE_DIR, '/static/'),
+# )
+# TEMPLATE_DIRS = (
+#    os.path.join(BASE_DIR, 'templates'),
+#)
+
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 5,
+
+    #    'DEFAULT_PERMISSION_CLASSES': (
+    #        'rest_framework.permissions.IsAuthenticated',
+    #    ),
+
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        #        'web_tokens.authentication.JWTAuthentication',
+        #        'rest_framework.authentication.SessionAuthentication',
+        #        'rest_framework.authentication.BasicAuthentication',
+        #        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+    ),
 
     'DEFAULT_FILTER_BACKENDS': (
         'django_filters.rest_framework.DjangoFilterBackend',
