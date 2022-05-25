@@ -6,5 +6,5 @@ psycopg2==2.7.5
 flake8==3.5.0
 python-dotenv==0.8.2
 django-cors-headers==2.4.0
-PyJWT==1.6.4
+PyJWT==2.4.0
 requests==2.19.1
